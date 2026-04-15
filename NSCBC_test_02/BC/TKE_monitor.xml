@@ -1,0 +1,7 @@
+<?xml version = "1.0"?>
+<MonitorVolumeAverage Version="0.1">
+    <function1 Name="TKE_BOX">
+        <FunctionToEvaluate>0.5*(UU + VV + WW)</FunctionToEvaluate>
+        <VariablesToParse> UU, VV, WW</VariablesToParse>
+    </function1>
+</MonitorVolumeAverage>

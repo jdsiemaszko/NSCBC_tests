@@ -3,7 +3,7 @@ Benchmark cases for testing the NSCBC module in IC3
 Tests include:
 
 NSCBC_test_01:
-A 1D channel flow at 1m/s with an NSCBC_LaminarInflow as the inlet and NSCBC_PressureOutlet as the outlet.
+A 1D channel flow at 1m/s with NSCBC_LaminarInflow as the inlet and NSCBC_PressureOutlet as the outlet.
 
 Broadband signal is applied at the inlet from a file ./BC/signal.txt.
 Signal is recorded in probes along the x direction, readings are compared to the injected signal.

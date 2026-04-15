@@ -1,0 +1,30 @@
+<!-- <?xml version="1.0"?>
+<?xml-stylesheet href="CBC_LaminarInflow.xsl" type="text/xsl" ?> -->
+<BCFile Type="NSCBC" Version="0.1">
+  <Profiles Type="YZ">
+    <Coordinates_2 >0.0 0.33</Coordinates_2>
+    <Coordinates_3 >0.0 0.33</Coordinates_3>
+    <Fields>
+      <Field Name="MeanVelocity_1" ScalingFactor="1.0">
+        1.0 1.0
+        1.0 1.0
+      </Field>
+      <Field Name="MeanVelocity_2" ScalingFactor="0.0">
+        1.0 1.0
+        1.0 1.0
+      </Field>
+      <Field Name="MeanVelocity_3" ScalingFactor="0.0">
+        1.0 1.0
+        1.0 1.0
+      </Field>
+       <Field Name="MeanPressure" ScalingFactor="101325.0">
+        1.0 1.0
+        1.0 1.0
+      </Field>
+       <Field Name="MeanTemperature" ScalingFactor="288.15">
+        1.0 1.0
+        1.0 1.0
+      </Field>
+    </Fields>
+  </Profiles>
+</BCFile>

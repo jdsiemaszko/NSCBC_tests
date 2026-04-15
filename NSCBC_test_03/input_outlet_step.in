@@ -1,0 +1,81 @@
+############################################################
+### Run Parameters
+SIMPLE_RESTART CART
+CART.DOMAIN 0.0 1.0 0.0 0.33 0.0 0.33
+CART.SIZE 1000 1 1
+
+NSTEPS = 160000
+WRITE_RESTART 20000 
+RUNTIME = 1.0
+CHECK_INTERVAL = 1000
+#CFL = 0.8
+DT = 1E-6
+
+CORES_PER_NODE = 16
+#TIMESTEPPING INC_CFL CFLRATE 100 0.4 50 1500000  #CFLMAX 5
+
+############################################################
+### Numerics
+NUMERICAL_SCHEME FINITE_VOLUME CENTERED_HYB RIEMANN=HLLC
+#NUMERICAL_SCHEME FINITE_VOLUME ENO RIEMANN=HLLC
+#NUMERICAL_SCHEME FINITE_VOLUME FIRST_ORDER RIEMANN=HLLC
+
+############################################################
+### Physics
+SGS_MODEL = NONE
+PHYSICS = CONSTANT_PROPERTIES
+RHO_REF = 1.225
+P_REF = 101325.
+T_REF = 288.15 #set the gaz constant to R = P/rho*T = 287
+MU_POWER_LAW = 0.0
+MU_REF = 1.6e-5
+
+############################################################
+### Boundary conditionos (Patches should have been renamed during the Preproc)
+
+# FORCING
+x0 = NSCBC_LaminarInflow FILE ./BC/NSCBC_inlet.xml RELAX 0.15 
+
+x1 = NSCBC_PressureOutlet 101325.0 FILE ./BC/NSCBC_outlet_step.xml RELAX 0.15 WAVE_CORRECTION
+
+y1 = SLIPWALL_ADIABATIC
+y0 = SLIPWALL_ADIABATIC 
+z0 = SLIPWALL_ADIABATIC
+z1 = SLIPWALL_ADIABATIC
+
+# Periodic conditions for 'left' and 'right', that do not need to be defined here (should have been done in the preproc) 
+
+############################################################
+### Initial condition (to be commented)
+INITIALIZE
+INIT_U 1.
+INIT_V 0.
+INIT_W 0.
+INIT_P 101325.0
+INIT_T 288.15
+
+############################################################
+### Compute variables
+# Additional variables
+AUX_SCALARS UU VV WW DUDX DVDY DWDZ Q_CRIT DILATATION 20
+AUX_VECTORS VORT 20
+# Statistics
+STATS P RHO U T VORT UU VV WW
+RESET_STATS
+STATS_INTERVALS 20
+#STATS_AVERAGE Z
+
+############################################################
+### Solutions
+WRITE_DATA FORMAT PVTK nFiles=1 coresPerGroup=1 NAME SOLUT/snap INTERVAL 250 GEOM ALL VARS CFL T U P RHO VORT MU_SGS SS_FLAG VORT Q_CRIT DILATATION U_AVG P_AVG T_AVG RHO_AVG VORT_AVG P_RMS
+
+############################################################
+### Probe locations
+MONITOR VOLUME_AVERAGE VARS=RHO P U # For volume averaged quantities
+PROBE NAME=TEMPORAL/centerline INTERVAL 20 GEOM=LINE 0.0 0.165 0.165 1.0 0.165 0.165 100 VARS=RHO P U DILATATION P_AVG U_AVG
+
+# MONITOR BOX-AVE TKE
+MONITOR VOLUME_AVERAGE XML_FILE=./BC/TKE_monitor.xml NAME MONITORS/monitor_TKE
+MONITOR BOUNDARY_CONDITION NSCBC_PressureOutlet BC_NAME x1 DUMP_VTU 1000000 FOLDER BC_DUMP WRITE_FREQUENCY 100 FLUSH_FREQUENCY 1000 NAME MONITORS/monitor_WALL
+MONITOR BOUNDARY_CONDITION NSCBC_LaminarInflow BC_NAME x0 DUMP_VTU 1000000 FOLDER BC_DUMP WRITE_FREQUENCY 100 FLUSH_FREQUENCY 1000 NAME MONITORS/monitor_INLET
+

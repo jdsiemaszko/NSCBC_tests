@@ -1,3 +1,8 @@
+"""
+USAGE: python post_processing.py <TEMPORAL folder path> <mode:{'inlet' or 'outlet'}> <forcing file path> <relaxation value>
+"""
+
+
 import sys
 import numpy as np
 import os
@@ -19,13 +24,13 @@ fmax_interp = 10000
 probe_index=50
 
 
-mode = sys.argv[2] if len(sys.argv) > 2 else 'outlet'
+mode = sys.argv[2] if len(sys.argv) > 2 else 'inlet'
 print(f"using mode: {mode}")
 
 if len(sys.argv) > 3:
     forcing_file = sys.argv[3]
 else:
-    forcing_file = 'BC/signal.U' if mode=="outlet" else 'BC/signal_alt.U'
+    forcing_file = 'BC/signal.U' if mode=="inlet" else 'BC/signal_alt.U'
 
 if len(sys.argv) > 4:
     sigma = float(sys.argv[4])
